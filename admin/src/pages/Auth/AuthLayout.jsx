@@ -10,7 +10,7 @@ const AuthLayout = ({ color, header, title, description, illustration, children 
          <Grid item xs={11} sm={8} md={6} lg={4} xl={3} sx={{ mx: "auto" }}>
             <Box display="flex" flexDirection="column" justifyContent="center" height="100vh">
                <Box pt={3} px={3}>
-                  {!header ? (
+                  {!header ? (    
                      <>
                         <Box mb={1}>
                            <Typography variant="h4" fontWeight="bold">

@@ -103,7 +103,7 @@ const EditOrder = () => {
       ) : (
         <Grid container spacing={5} display="flex" direction="row" p={8} justifyContent="center">
           <Grid item container alignContent="start" width="100%" xs={12} sm={12} md={7} lg={5} spacing={3}>
-            {details?.products?.item.map(product => (
+            {details?.products?.item?.map(product => (
               <Grid item container key={product?.product_id?._id} xs={12} mb={2} sx={{
                 position: 'relative',
                 display: "flex",

@@ -9,7 +9,7 @@ import Banner from "pages/Banner";
 import Settings from "pages/Settings";
 import Billing from "layouts/billing";
 import Profile from "layouts/profile";
-import Box from "components/Box";
+import Box from "components/Box";    
 import Sections from "pages/Sections";
 import Blogs from "pages/Blogs";
 
