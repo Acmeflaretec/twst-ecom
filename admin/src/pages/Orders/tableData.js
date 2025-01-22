@@ -72,12 +72,12 @@ const TableData = () => {
         value={item?.status}
         onChange={(e) => handleStatusChange(item._id, e.target.value)}
       >{item?.status === 'Delivered' || item?.status === 'Canceled' ?
-        (['Delivered', 'Canceled'].map(status => (
+        (['Delivered', 'Canceled']?.map(status => (
           <MenuItem key={status} value={status}>
             {status}
           </MenuItem>
         )))
-        : (['Pending', 'Placed', 'Shipped', 'Out for delivery', 'Delivered', 'Delayed', 'Canceled'].map(status => (
+        : (['Pending', 'Placed', 'Shipped', 'Out for delivery', 'Delivered', 'Delayed', 'Canceled']?.map(status => (
           <MenuItem key={status} value={status}>
             {status}
           </MenuItem>

@@ -3,9 +3,15 @@ import ImageSlider from "../component/carousel/ImageSlider";
 import Categories from "../component/categories/Categories";
 import BestSeller from "../component/bestSeller/BestSeller";
 import fashion from "../asset/fashion.png";
+import { useNavigate } from 'react-router-dom';
 
 
 const Home = () => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate('/shop');
+  };
   return (
     <div className="w-full px-6 md:px-6">
       <ImageSlider />
@@ -20,7 +26,7 @@ const Home = () => {
             1200 timeless styles at up to{" "}
             <span className="text-textColor"> 40% off</span>
           </h2>
-          <button className="px-10 py-3 border-solid border-2 border-zinc-500 text-sm mx-auto mt-8">
+          <button className="px-10 py-3 border-solid border-2 border-zinc-500 text-sm mx-auto mt-8" onClick={handleClick} >
             SHOP NOW
           </button>
         </div>
@@ -43,12 +49,12 @@ const Home = () => {
           <p className="text-right text-sm md:text-4xl font-medium">
             More reasons for Joy!
           </p>
-          <button className="mt-6 bg-zinc-400 bg-opacity-20 backdrop-blur-sm px-1 py-2 md:px-6 md:py-3 rounded-md shadow-md">
+          <button className="mt-6 bg-zinc-400 bg-opacity-20 backdrop-blur-sm px-1 py-2 md:px-6 md:py-3 rounded-md shadow-md" onClick={handleClick}>
             Shop Now
           </button>
         </div>
       </div>
-      
+
     </div>
   );
 };

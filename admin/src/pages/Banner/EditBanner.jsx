@@ -160,7 +160,7 @@ const EditBanner = () => {
                   />
                </Grid>
 
-               <Grid item xs={12} container alignItems="center">
+               {/* <Grid item xs={12} container alignItems="center">
                   <FormControl>
                      <Typography variant="caption">Choose Banner File Type</Typography>
                      <RadioGroup
@@ -175,7 +175,7 @@ const EditBanner = () => {
                      </RadioGroup>
                      <Typography variant="caption">For video files upload to an external cdn and paste the src here</Typography>
                   </FormControl>
-               </Grid>
+               </Grid> */}
 
                <Grid item xs={12} >
                   {data?.type === "video" ? <Input

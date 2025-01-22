@@ -141,7 +141,7 @@ const AddBanner = () => {
                      helperText="Short Description (about 10-20 words)"
                   />
                </Grid>
-               <Grid item xs={12} container alignItems="center">
+               {/* <Grid item xs={12} container alignItems="center">
                   <FormControl>
                      <Typography variant="caption">Choose Banner File Type</Typography>
                      <RadioGroup
@@ -156,7 +156,7 @@ const AddBanner = () => {
                      </RadioGroup>
                      <Typography variant="caption">For video files upload to an external cdn and paste the src here</Typography>
                   </FormControl>
-               </Grid>
+               </Grid> */}
                <Grid item xs={12} >
                   {data?.type === "video" ? <Input
                      placeholder="Banner Video Source (url)"

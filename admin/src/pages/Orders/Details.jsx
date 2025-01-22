@@ -4,7 +4,7 @@ import React from 'react'
 
 const Details = ({ data }) => {
     const handleChange = () => {
-        console.log(data);
+        console.log(data);    
     }
     return (
         <Grid item container spacing={2} xs={12} sm={12} md={5} lg={4}>

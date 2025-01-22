@@ -31,13 +31,13 @@ const ProductSlide = ({ text, items, slider }) => {
       <Carousel responsive={responsive}>
         {slider === "Categories" &&
           items &&
-          items.map((item) => (
+          items?.map((item) => (
             <div
-              key={item?.id}
+              key={item?._id}
               className="w-full md:w-56  lg:w-64 lg:h-70 mr-11 bg-red-400 rounded-lg relative  overflow-hidden group"
             >
               <img
-                src={item?.img}
+                src={`${process.env.REACT_APP_API_BASE_URL}/uploads/${item?.image}`}
                 alt=""
                 srcSet=""
                 className="rounded-lg transition-transform duration-300 ease-in-out group-hover:scale-110"

@@ -1,36 +1,37 @@
+
 import axios from "axios";
 
-console.log('process.env.REACT_APP_API_URL',process.env.REACT_APP_API_URL);
-
-const axiosInstance = axios.create({
-  baseURL: `${process.env.REACT_APP_API_URL}/api/v1/`,
-  withCredentials: false,
+const instance = axios.create({
+  baseURL: process.env.REACT_APP_API_URL,
+  withCredentials: true,
 });
 
 // default header
 axios.defaults.headers.common["Accept"] = "application/json";
 axios.defaults.headers.common["Accept"] = "multi-part/formdata";
 
-axiosInstance.interceptors.request.use(
-  async (config) => {    
+instance.interceptors.request.use(
+  async (config) => {
+   
     const token = JSON.parse(localStorage.getItem("Tokens"));
 
     if (token) {
-      config.headers.Authorization = `Bearer ${token?.accessToken}`;
+      
+      config.headers.Authorization = `Bearer ${token?.access}`;
     }
-console.log('interceptor',config);
+ 
     return config;
   }
-  // (error) => {
-  //   return Promise.reject(error);
-  // }
+  
 );
 
-axiosInstance.interceptors.response.use(
+instance.interceptors.response.use(
   (response) => {
+   // console.log('response1',response);
     return response;
   },
   async (error) => {
+
     if (
       error?.response?.data?.code === "token_not_valid" &&
       error?.response?.status === 401
@@ -43,10 +44,13 @@ axiosInstance.interceptors.response.use(
         originalConfig._retry = true;
         try {
           const tokens = JSON.parse(localStorage.getItem("Tokens"));
-          const response = await axiosInstance.post("users/token/refresh/", {
+          
+          const response = await instance.post("users/token/refresh/", {
             refresh: tokens.refresh,
           });
           let accessToken = response?.data?.access;
+ 
+
           if (accessToken) {
             localStorage.setItem(
               "Tokens",
@@ -54,24 +58,20 @@ axiosInstance.interceptors.response.use(
             );
           }
 
-          return axiosInstance(originalConfig);
+          return instance(originalConfig);
         } catch (_error) {
           return Promise.reject(_error);
         }
       }
     }
-    // else if (error?.response?.status == 502) {
-    //   console.log(error?.response);
-    //   console.log("Failed");
-    // } else if (error?.response?.status == 403) {
-    //   return Promise.reject("refresh_not_valid"); // for disabling login from multiple devices
-    // }
+  
     else {
+     
       return Promise.reject(error);
     }
   }
 );
-axiosInstance.interceptors.response.use(
+instance.interceptors.response.use(
   (response) => {
     return response;
   },
@@ -84,4 +84,5 @@ axiosInstance.interceptors.response.use(
     }
   }
 );
-export { axiosInstance };
+
+export default instance;
