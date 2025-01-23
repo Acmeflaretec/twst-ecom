@@ -157,6 +157,7 @@ if(sort){
   products = await Product.find(filter)
       .populate('category')
       .populate('variantProduct')
+      
       .skip(skip)
       .limit(limit)
       // .sort({ createdAt: -1 })
@@ -172,7 +173,11 @@ if(sort){
 }else{
   products = await Product.find(filter)
       .populate('category')
-      .populate('variantProduct')
+      // .populate('variantProduct')
+      .populate({
+        path: 'variantProduct',
+        populate: { path: 'category' }
+     })
       // .skip(skip)
       // .limit(limit)
       // .sort({ createdAt: -1 })
@@ -263,7 +268,11 @@ const getClientProductById = async (req, res) => {
           path: 'category',
         },
       })
-      .populate('variantProduct')
+      // .populate('variantProduct')
+      .populate({
+        path: 'variantProduct',
+        populate: { path: 'category' }
+     })
       .populate('coupons')
 
     if (!product) {
