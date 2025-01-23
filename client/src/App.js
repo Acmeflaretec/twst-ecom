@@ -7,6 +7,8 @@ import Contact from "./page/Contact";
 import Cart from "./page/Cart";
 import Shop from "./page/Shop";
 import ProductDetails from "./component/shop/ProductDetails";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
   return (
@@ -18,9 +20,10 @@ const App = () => {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/details/:id/:name" element={<ProductDetails/>}/>
+          <Route path="/details/:id" element={<ProductDetails/>}/>
         </Routes>
       </Layout>
+      <ToastContainer />
     </Router>
   );
 };
