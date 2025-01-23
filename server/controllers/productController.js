@@ -186,11 +186,7 @@ if(sort){
     shuffledProducts =  shuffledProduct ;
 
 }
-    
-
-
-
-    const totalProducts = await Product.countDocuments(filter);
+      const totalProducts = await Product.countDocuments(filter);
     const totalPages = Math.ceil(totalProducts / limit);
 
     const start = (page - 1) * limit + 1;
@@ -252,7 +248,6 @@ const getProductById = async (req, res) => {
 }
 const getClientProductById = async (req, res) => {
   const id = req.params.id
-
   try {
     const product = await Product.findById(id)
       .populate({

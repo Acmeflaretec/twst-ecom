@@ -438,7 +438,7 @@ const AddProduct = () => {
           <Grid item xs={12}>
             <Input
               id="description"
-              placeholder="Nila Chronicles"
+              placeholder="Description"
               name="description"
               value={details?.description || ''}
               onChange={handleChange}

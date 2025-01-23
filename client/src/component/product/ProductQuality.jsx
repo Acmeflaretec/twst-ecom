@@ -1,7 +1,7 @@
 import React from "react";
 import { quality } from "../../utils/constant/quality";
 import cloth from "../../asset/cloth.png";
-import ProductReview from "./ProductReview";
+
 
 const ProductQuality = () => {
   return (
@@ -39,7 +39,7 @@ const ProductQuality = () => {
           <p className="mt-2 text-sm sm:text-base max-w-lg font-thin text-gray-300">it all starts with choosing the right ingredients for our styles.For a garment,the right material is the difference between staying in a wardobe or ending up in a landlill</p>
         </div>
       </div>
-      <ProductReview/>
+      
     </>
   );
 };

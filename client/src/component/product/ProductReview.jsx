@@ -2,7 +2,7 @@ import React from 'react'
 import {review} from '../../utils/constant/review'
 import { AiFillStar } from 'react-icons/ai'
 
-const ProductReview = () => {
+const ProductReview = ({data}) => {
   return (
     <div>
          <div className="py-12 px-4 sm:px-8 lg:px-16">

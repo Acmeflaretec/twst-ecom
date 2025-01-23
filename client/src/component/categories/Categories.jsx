@@ -10,7 +10,6 @@ const [categorie, setCategories] = useState([{}]);
   const fetchCategories = async () => {
     try {
       const { data } = await axiosInstance.get(`/category/getHomeCategory`);
-      console.log('data?.data',data?.data);
       
       setCategories(data?.data);
     } catch (error) {

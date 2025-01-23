@@ -4,6 +4,7 @@ import { IoBagAddOutline } from "react-icons/io5";
 import category from "../../asset/category.png";
 import men from "../../asset/men.jpg";
 import { Link } from "react-router-dom";
+// import CardDatas from "../cardData/CardDatas";
 
 const ProductList = () => {
   const [changePhoto, setChangePhoto] = useState(false);

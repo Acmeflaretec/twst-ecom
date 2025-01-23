@@ -56,7 +56,7 @@ const AddSection = () => {
             .then((res) => {
                if (res) {
                   toast.success(res?.message ?? "Section added Successfully");
-                  navigate('/section')
+                  navigate('/sections')
                }
             })
             .catch((err) => {
