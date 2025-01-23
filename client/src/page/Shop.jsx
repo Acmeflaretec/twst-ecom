@@ -3,16 +3,14 @@ import Filter from "../component/shop/Filter";
 // import ProductList from "../component/shop/ProductList";
 import ProductListPagination from "../component/shop/ProductListPagination";
 import { useSearchParams } from "react-router-dom";
-import axiosInstance from '../axios';
+import axiosInstance from "../axios";
 import CardDatas from "../component/cardData/CardDatas";
 
 const Shop = () => {
-
   const [products, setProducts] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
   const [message, setMessage] = useState("");
   const [searchParams] = useSearchParams();
-
 
   const fetchProducts = async () => {
     const page = searchParams.get("page") || 1;
@@ -32,7 +30,7 @@ const Shop = () => {
         category,
         priceRange,
         sort,
-      }
+      },
     });
 
     setProducts(data.products);
@@ -58,8 +56,7 @@ const Shop = () => {
       <div className="w-full p-3  border border-gray-50 rounded-md flex items-center gap-3 mt-4">
         <Filter btnText="Remove All" />
         <Filter btnText="In Stock" />
-        <Filter btnText="In Stock" />
-        <Filter btnText="In Stock" />
+       
       </div>
       {/* <div
         className="w-full grid gap-4 
@@ -74,49 +71,30 @@ const Shop = () => {
           <ProductList key={index} />
         ))}
       </div> */}
-       <p className="mt-4">{message}</p>
-      <div
+      <p className="mt-4">{message}</p>
+      {/* <div
         className="w-full grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
       >
         {products.map((product) => (
           <CardDatas key={product._id} product={product} />
         ))}
+      </div> */}
+      <div className="w-full grid gap-4 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+        {products.map((product) => (
+          <CardDatas key={product._id} product={product} />
+        ))}
       </div>
 
+      <div></div>
 
-      <div>
-
-      </div >
-      
       <div className="mt-10">
-      <ProductListPagination totalPages={totalPages}/>
+        <ProductListPagination totalPages={totalPages} />
       </div>
     </div>
   );
 };
 
 export default Shop;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import React from "react";
 // import Filter from "../component/shop/Filter";
@@ -143,10 +121,10 @@ export default Shop;
 //         <Filter btnText="In Stock" />
 //       </div>
 //       <div
-//         className="w-full grid gap-4 
-//                 grid-cols-1 
-//                 sm:grid-cols-2 
-//                 md:grid-cols-3 
+//         className="w-full grid gap-4
+//                 grid-cols-1
+//                 sm:grid-cols-2
+//                 md:grid-cols-3
 //                 lg:grid-cols-4
 //                 xl:grid-cols-5
 //                 "
@@ -158,7 +136,7 @@ export default Shop;
 //       <div>
 
 //       </div >
-      
+
 //       <div className="mt-10">
 //       <ProductListPagination/>
 //       </div>
@@ -168,7 +146,7 @@ export default Shop;
 
 // export default Shop;  this is my shop page.
 
-// import React, { useState } from "react"; 
+// import React, { useState } from "react";
 // import { Link } from "react-router-dom";
 // import CardDatas from "../cardData/CardDatas";
 // import { Link } from "react-router-dom";
@@ -193,7 +171,7 @@ export default Shop;
 
 // const CardDatas = (product) => {
 //     console.log('new product',product);
-    
+
 //     const [changePhoto, setChangePhoto] = useState(false);
 
 //     return (
@@ -213,16 +191,16 @@ export default Shop;
 //               <div className="absolute top-2 left-2 bg-red-950 text-white px-2 py-1 rounded text-xs font-semibold">
 //                 {`${product?.discount}% OFF`}
 //               </div>
-  
+
 //               <button className="absolute top-2 right-2 bg-white p-1 rounded-full cursor-pointer">
 //                 <CiHeart className="bg- hover:text-red-500" size={18} />
 //               </button>
-  
+
 //               <button className="flex items-center gap-3 md:gap-1 lg:gap-3  absolute left-1/2 bottom-4 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out bg-white text-black py-3 px-3  md:py-2 md:px-2  lg:py-3 lg:px-3 text-sm font-thin">
 //                 <IoBagAddOutline /> ADD TO BAG
 //               </button>
 //             </div>
-  
+
 //             <div className="p-4 flex flex-col gap-2">
 //               <div className="flex items-center justify-between">
 //                 <h2 className="text-sm font-light text-gray-800">
@@ -261,7 +239,7 @@ export default Shop;
 //           previousLabel=""
 //           nextLabel=""
 //           onPageChange={onPageChange}
-      
+
 //           showIcons
 //         />
 //       </div>
