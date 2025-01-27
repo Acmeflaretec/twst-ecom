@@ -5,8 +5,9 @@ const {
   // signup,
   // signin
   getCurrentUser,
-  sendOtp,
+  // sendOtp,
   verifyOtp,
+  sendWhatsAppOtp,
   googleLogin,
   facebookLogin
 } = require("../controllers/authController");
@@ -14,11 +15,13 @@ const authorization = require("../middlewares/authorization");
 
 // router.post("/register", signup);
 // router.post("/login", signin);
-router.get("/user", authorization, getCurrentUser);
 router.post('/google-login', googleLogin);       
 router.post('/facebook-login', facebookLogin);       
 
-router.post('/send-otp',sendOtp);
+router.get("/user", authorization, getCurrentUser);
+// router.post('/send-otp',sendOtp);
 router.post('/verify-otp',verifyOtp);
+
+router.post('/send-whatsapp-otp', sendWhatsAppOtp);
 
 module.exports = router;
