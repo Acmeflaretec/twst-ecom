@@ -27,6 +27,9 @@ import Dashboard from "./component/user_profile/Dashboard";
 import Orders from "./component/user_profile/Orders";
 import Address from "./component/user_profile/Address";
 import UserProfile from "./component/user_profile/UserProfile";
+import Login from "./component/auth/Login";
+import CustomToaster from "./utils/constant/CustomToaster";
+import Wishlist from "./page/Wishlist";
 
 const App = () => {
   return (
@@ -48,11 +51,13 @@ const App = () => {
         {/* Main Application Layout */}
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
+          <Route path="login" element={<Login />} />
           <Route path="shop" element={<Shop />} />
           <Route path="about" element={<About />} />
           <Route path="contact" element={<Contact />} />
           <Route path="cart" element={<Cart />} />
-          <Route path="details/:id/:name" element={<ProductDetails />} />
+          <Route path="wishlist" element={<Wishlist />} />
+          <Route path="details/:id" element={<ProductDetails />} />
           <Route path="profile" element={<Profile />} />
         </Route>
 
@@ -64,6 +69,7 @@ const App = () => {
           <Route path="user_profile" element={<UserProfile />} />
         </Route>
       </Routes>
+      <CustomToaster />
     </Router>
   );
 };

@@ -7,6 +7,7 @@ const path = require('path');
 const dotenv = require('dotenv');
 dotenv.config();
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const twilio = require('twilio');
 
 module.exports.getCurrentUser = async (req, res) => {
   try {
@@ -24,31 +25,56 @@ module.exports.getCurrentUser = async (req, res) => {
 
 let otpStore = {};
 
-module.exports.sendOtp = async (req, res) => {
-  const { number } = req.body;
-  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+// module.exports.sendOtp = async (req, res) => {
+//   const { number } = req.body;
+//   const otp = Math.floor(100000 + Math.random() * 900000).toString();
+//   otpStore[number] = otp;
+//   try {
+//     const accountSid = process.env.TWILIO_ACCOUNT_SID;
+//     const authToken = process.env.TWILIO_AUTH_TOKEN;
+//     const client = twilio(accountSid, authToken);
+//     client.messages
+//       .create({
+//         body: `✨ Twst Verification ✨\n\nYour verification code is: ${otp}\n\nPlease enter this code to verify your identity. This code is valid for 10 minutes.\n\nThank you for choosing NilaaTrends! 🛍️\n\nRegards, NilaaTrends Team`,
+//         from: '+13343731097',
+//         to: number
+//       })
+//       .then(message => console.log(message.sid));
+//     res.status(200).json({ message: 'OTP sent successfully' });
+//   } catch (error) {
+//     console.log(error)
+//     res.status(500).json({ message: 'Failed to send OTP', error: error.message });
+//   }
+// };
+
+module.exports.sendWhatsAppOtp = async (req, res) => {
+  const { number } = req.body; // `number` should include the country code, e.g., +91XXXXXXXXXX
+  const otp = Math.floor(100000 + Math.random() * 900000).toString(); // Generate 6-digit OTP
+  console.log('number,otp',number,otp);
+  
   otpStore[number] = otp;
+
   try {
-    const accountSid = process.env.TWILIO_ACCOUNT_SID;
-    const authToken = process.env.TWILIO_AUTH_TOKEN;
-    const client = require('twilio')(accountSid, authToken);
-    client.messages
-      .create({
-        body: `✨ NilaaTrends Verification ✨\n\nYour verification code is: ${otp}\n\nPlease enter this code to verify your identity. This code is valid for 10 minutes.\n\nThank you for choosing NilaaTrends! 🛍️\n\nRegards, NilaaTrends Team`,
-        from: '+13343731097',
-        to: number
-      })
-      .then(message => console.log(message.sid));
-    res.status(200).json({ message: 'OTP sent successfully' });
+    // const accountSid = process.env.TWILIO_ACCOUNT_SID;
+    // const authToken = process.env.TWILIO_AUTH_TOKEN;
+    // const client = twilio(accountSid, authToken);
+
+    // await client.messages.create({
+    //   from: process.env.TWILIO_WHATSAPP_FROM,
+    //   to: `whatsapp:${number}`,
+    //   body: `✨ Twst Verification ✨\n\nYour OTP is: ${otp}\n\nPlease enter this code to verify your identity. Valid for 10 minutes.`,
+    // });
+
+    res.status(200).json({ message: 'OTP sent via WhatsApp successfully' });
   } catch (error) {
-    console.log(error)
-    res.status(500).json({ message: 'Failed to send OTP', error: error.message });
+    console.error('Error sending WhatsApp OTP:', error);
+    res.status(500).json({ message: 'Failed to send OTP via WhatsApp', error: error.message });
   }
 };
 
 module.exports.verifyOtp = async (req, res) => {
-  const { number, otp, referrerId } = req.body;
-  console.log('number, otp,referrerId', number, otp, referrerId);
+  const { number, otp } = req.body;
+  console.log('number, otp', number, otp);
 
   if (otpStore[number] !== otp) {
     return res.status(400).json({ message: 'Invalid OTP' });
@@ -58,14 +84,6 @@ module.exports.verifyOtp = async (req, res) => {
 
   if (!user) {
     user = new User({ phone: number });
-    user.wallet += 500;
-    if (referrerId) {
-      const referrer = await User.findById(referrerId);
-      if (referrer) {
-        referrer.wallet += 100;
-        await referrer.save();
-      }
-    }
     await user.save();
   }
 

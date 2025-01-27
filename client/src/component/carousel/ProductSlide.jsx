@@ -40,13 +40,13 @@ const ProductSlide = ({ text, items, slider }) => {
             <div
               key={item?._id}
               onClick={() => navigate(`/shop?category=${item.name}`)}
-              className="w-full md:w-56  lg:w-64 lg:h-70 mr-11 bg-red-400 rounded-lg relative overflow-hidden group"
+              className="h-56 w-full md:w-56  lg:w-64 lg:h-70 mr-11 bg-red-400 rounded-lg relative overflow-hidden group"
             >
               <img
                 src={`${process.env.REACT_APP_API_BASE_URL}/uploads/${item?.image}`}
                 alt=""
                 srcSet=""
-                className="rounded-lg transition-transform duration-300 ease-in-out group-hover:scale-110"
+                className="w-full h-full object-cover lg:object-fill rounded-lg transition-transform duration-300 ease-in-out group-hover:scale-110"
               />
               <button className=" font-semibold px-6 py-2  border-solid border-2 border-white text-sm text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                 {item?.name}

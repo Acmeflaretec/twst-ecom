@@ -2,8 +2,19 @@ import React from "react";
 import category from "../../asset/category.png";
 import NewArrivalSlice from "../carousel/NewArrivalSlice";
 import {categories} from '../../utils/constant/categories'
+import { useDispatch } from "react-redux";
+import { setUserDetails, clearUserDetails } from '../../redux/actions/userActions.js';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
+const dispatch = useDispatch()
+const navigate = useNavigate()
+  const logoutUser = () => {
+    dispatch(clearUserDetails());
+    localStorage.removeItem('Tokens');
+    // window.location.reload();
+    navigate('/');
+  };
   return (
     <>
     <div className="p-6 md:p-10">
@@ -19,7 +30,7 @@ const Dashboard = () => {
         <button className="text-gray-700 font-medium border-b-2 border-black">
           EDIT PROFILE
         </button>
-        <button className="text-gray-500">LOG OUT</button>
+        <button className="text-gray-500" onClick={logoutUser}>LOG OUT</button>
       </div>
 
       <div className="flex flex-col md:flex-row  items-center gap-6 mt-8">
