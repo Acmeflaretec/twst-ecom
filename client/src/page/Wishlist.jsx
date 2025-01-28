@@ -35,7 +35,7 @@ const Wishlist = () => {
 
     return (
         <>
-            <div className="max-w-7xl mx-auto p-4 md:mt-28" style={{display:'flex',justifyContent:'center'}}>
+            <div className="max-w-7xl mx-auto p-4" style={{display:'flex',justifyContent:'center'}}>
                 {wishlistItems?.length === 0 ? (
                     <div>
                         <p className="text-xs sm:text-sm text-gray-600 mt-8">

@@ -11,14 +11,13 @@ const tagRoutes = require('./tagRoutes');
 const sectionRoutes = require('./sectionRoutes');
 const couponRoutes = require('./couponRoutes');
 const reviewRoutes = require('./reviewRoutes')
-const paymentRoutes = require('./paymentRoutes')
 
 const router = express.Router();
 
 router.use('/v1/auth', authRoutes);
 router.use('/v1/user', userRoutes);
 router.use('/v1/category', categoryRoutes);
-router.use('/v1/coupons', couponRoutes);
+router.use('/v1/coupons', couponRoutes);   
 router.use('/v1/products', productRoutes);
 router.use('/v1/orders', orderRoutes);
 router.use('/v1/address', addressRoutes);
@@ -27,6 +26,5 @@ router.use('/v1/tags', tagRoutes);
 router.use('/v1/blogs', blogRoutes);
 router.use('/v1/section', sectionRoutes);
 router.use('/v1/reviews', reviewRoutes);
-router.use('/v1/payment', paymentRoutes);
 
 module.exports = router;

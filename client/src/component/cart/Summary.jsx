@@ -1,5 +1,4 @@
 // const Summary =()=>{
-
 //     return (
 //         <>
 //          <div className="w-full lg:w-1/3 p-6 rounded-lg mt-6 shadow-md lg:mt-0  lg:h-[calc(100vh-100px)]">
@@ -38,9 +37,13 @@
 
 // export default Summary
 
-
+import { useNavigate } from "react-router-dom";
 
 const Summary = ({ salePriceTotal, deliveryCharge, proPriceTotal,lastTotal }) => {
+  const navigate = useNavigate();
+  const handleCheckout = () => {
+    navigate('/checkout')
+  }
   return (
     <div className="w-full lg:w-1/3 p-6 rounded-lg mt-6 shadow-md lg:mt-0 lg:h-[calc(100vh-100px)]">
       <h2 className="text-2xl font-bold mb-6">Summary</h2>
@@ -62,7 +65,7 @@ const Summary = ({ salePriceTotal, deliveryCharge, proPriceTotal,lastTotal }) =>
         <p>Total</p>
         <p>₹ {lastTotal}</p>
       </div>
-      <button className="w-full mt-6 bg-black text-white py-3 rounded-lg hover:bg-gray-800">
+      <button className="w-full mt-6 bg-black text-white py-3 rounded-lg hover:bg-gray-800" onClick={handleCheckout}>
         PROCEED TO CHECKOUT
       </button>
       <p className="mt-4 text-center text-gray-500 text-sm">
