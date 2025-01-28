@@ -2,218 +2,265 @@ import React, { useState } from "react";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import { useFormik } from "formik";
-import { validationSchema } from "../../schema/AddressSchema";
+import axiosInstance from "../../axios";
+import * as Yup from "yup";
+import { toast } from "react-hot-toast";
 
-const AddNewAddressForm = () => {
-  const [phoneNumber, setPhoneNumber] = useState("");
+const AddNewAddressForm = ({ onClose, editData }) => {
+  const [phoneNumber, setPhoneNumber] = useState(editData?.mobile || "");
+  const [loding,setLodig] = useState(false)
+
+  const validationSchema = Yup.object({
+    firstname: Yup.string().required("First Name is required"),
+    lastname: Yup.string().required("Last Name is required"),
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Email is required"),
+    country: Yup.string().required("Country is required"),
+    address_line_1: Yup.string().required("Address Line 1 is required"),
+    city: Yup.string().required("City is required"),
+    state: Yup.string().required("State is required"),
+    zip: Yup.string().required("Zip Code is required"),
+  });
 
   const formik = useFormik({
     initialValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      contactNumber: "",
+      firstname: editData?.firstname || "",
+      lastname: editData?.lastname || "",
+      email: editData?.email || "",
+      country: editData?.country || "",
+      address_line_1: editData?.address_line_1 || "",
+      address_line_2: editData?.address_line_2 || "",
+      city: editData?.city || "",
+      state: editData?.state || "",
+      zip: editData?.zip || "",
     },
     validationSchema,
-    onSubmit: (values) => {
-      console.log("Form Data:", { ...values, contactNumber: phoneNumber });
-      alert("Form submitted successfully!");
+    onSubmit: async (values) => {
+      try {
+        if(!phoneNumber){
+          toast.error('Mobile is required')
+          return
+        }
+        setLodig(true)
+        if (editData) {
+          await axiosInstance.patch("/address", {
+            ...values,
+            mobile: phoneNumber,
+            _id: editData._id,
+          });
+          alert("Address updated successfully");
+        } else {
+          await axiosInstance.post("/address", {
+            ...values,
+            mobile: phoneNumber,
+          });
+          alert("Address added successfully");
+        }
+        onClose();
+        setLodig(false)
+      } catch (error) {
+        console.error(error);
+        setLodig(false)
+        alert("Error submitting the form");
+      }
     },
   });
 
+  const handleCancel = () => {
+    formik.resetForm();
+    onClose();
+    setLodig(false)
+
+  };
+
   return (
-    <div className="">
-      <div className="">
-        <h2 className="text-2xl font-semibold mb-6 text-center">
-          Add New Address
-        </h2>
-        <form onSubmit={formik.handleSubmit}>
-          {/* First Name and Last Name */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label
-                htmlFor="firstName"
-                className="block text-sm font-medium mb-1"
-              >
-                First Name*
-              </label>
-              <input
-                type="text"
-                id="firstName"
-                name="firstName"
-                placeholder="First Name"
-                className={`w-full px-3 py-3 border ${
-                  formik.touched.firstName && formik.errors.firstName
-                    ? "border-red-500"
-                    : "border-gray-300"
-                } focus:outline-none focus:ring-2 focus:ring-blue-500`}
-                {...formik.getFieldProps("firstName")}
-              />
-              {formik.touched.firstName && formik.errors.firstName && (
-                <p className="text-red-500 text-sm mt-1">
-                  {formik.errors.firstName}
-                </p>
-              )}
-            </div>
-            <div>
-              <label
-                htmlFor="lastName"
-                className="block text-sm font-medium mb-1"
-              >
-                Last Name*
-              </label>
-              <input
-                type="text"
-                id="lastName"
-                name="lastName"
-                placeholder="Last Name"
-                className={`w-full px-3 py-3 border ${
-                  formik.touched.lastName && formik.errors.lastName
-                    ? "border-red-500"
-                    : "border-gray-300"
-                } focus:outline-none focus:ring-2 focus:ring-blue-500`}
-                {...formik.getFieldProps("lastName")}
-              />
-              {formik.touched.lastName && formik.errors.lastName && (
-                <p className="text-red-500 text-sm mt-1">
-                  {formik.errors.lastName}
-                </p>
-              )}
-            </div>
+    <div className="max-w-4xl mx-auto p-4 border rounded">
+      <h2 className="text-2xl font-semibold mb-6 text-center">
+        {editData ? "Edit Address" : "Add New Address"}
+      </h2>
+      <form onSubmit={formik.handleSubmit}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label htmlFor="firstname" className="block text-sm font-medium mb-1">First Name*</label>
+            <input
+              type="text"
+              id="firstname"
+              name="firstname"
+              placeholder="First Name"
+              className={`w-full px-3 py-2 border ${formik.touched.firstname && formik.errors.firstname ? 'border-red-500' : 'border-gray-300'}`}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.firstname}
+            />
+            {formik.touched.firstname && formik.errors.firstname && (
+              <div className="text-red-500 text-sm mt-1">{formik.errors.firstname}</div>
+            )}
           </div>
 
-          {/* Email */}
-          <div className="mt-6">
-            <label htmlFor="email" className="block text-sm font-medium mb-1">
-              Email*
-            </label>
+          <div>
+            <label htmlFor="lastname" className="block text-sm font-medium mb-1">Last Name*</label>
+            <input
+              type="text"
+              id="lastname"
+              name="lastname"
+              placeholder="Last Name"
+              className={`w-full px-3 py-2 border ${formik.touched.lastname && formik.errors.lastname ? 'border-red-500' : 'border-gray-300'}`}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.lastname}
+            />
+            {formik.touched.lastname && formik.errors.lastname && (
+              <div className="text-red-500 text-sm mt-1">{formik.errors.lastname}</div>
+            )}
+          </div>
+
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium mb-1">Email*</label>
             <input
               type="email"
               id="email"
               name="email"
               placeholder="Email"
-              className={`w-full px-3 py-3 border ${
-                formik.touched.email && formik.errors.email
-                  ? "border-red-500"
-                  : "border-gray-300"
-              } focus:outline-none focus:ring-2 focus:ring-blue-500`}
-              {...formik.getFieldProps("email")}
+              className={`w-full px-3 py-2 border ${formik.touched.email && formik.errors.email ? 'border-red-500' : 'border-gray-300'}`}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.email}
             />
             {formik.touched.email && formik.errors.email && (
-              <p className="text-red-500 text-sm mt-1">{formik.errors.email}</p>
+              <div className="text-red-500 text-sm mt-1">{formik.errors.email}</div>
             )}
           </div>
 
-          {/* Password, Confirm Password, and Contact Number */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium mb-1"
-              >
-                New Password
-              </label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                placeholder="New Password"
-                className={`w-full px-3 py-3 border ${
-                  formik.touched.password && formik.errors.password
-                    ? "border-red-500"
-                    : "border-gray-300"
-                } focus:outline-none focus:ring-2 focus:ring-blue-500`}
-                {...formik.getFieldProps("password")}
-              />
-              {formik.touched.password && formik.errors.password && (
-                <p className="text-red-500 text-sm mt-1">
-                  {formik.errors.password}
-                </p>
-              )}
-            </div>
-            <div>
-              <label
-                htmlFor="confirmPassword"
-                className="block text-sm font-medium mb-1"
-              >
-                Confirm New Password
-              </label>
-              <input
-                type="password"
-                id="confirmPassword"
-                name="confirmPassword"
-                placeholder="Confirm New Password"
-                className={`w-full px-3 py-3 border ${
-                  formik.touched.confirmPassword &&
-                  formik.errors.confirmPassword
-                    ? "border-red-500"
-                    : "border-gray-300"
-                } focus:outline-none focus:ring-2 focus:ring-blue-500`}
-                {...formik.getFieldProps("confirmPassword")}
-              />
-              {formik.touched.confirmPassword &&
-                formik.errors.confirmPassword && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {formik.errors.confirmPassword}
-                  </p>
-                )}
-            </div>
-            <div>
-              <label
-                htmlFor="contactNumber"
-                className="block text-sm font-medium mb-1"
-              >
-                Contact Number*
-              </label>
-              <PhoneInput
-                placeholder="Enter phone number"
-                defaultCountry="IN"
-                value={phoneNumber}
-                onChange={(value) => {
-                  setPhoneNumber(value);
-                  formik.setFieldValue("contactNumber", value);
-                }}
-                className={`w-full px-2 py-1 border ${
-                  formik.touched.contactNumber && formik.errors.contactNumber
-                    ? "border-red-500"
-                    : "border-gray-300"
-                } focus:outline-none focus:ring-2 focus:ring-blue-500`}
-              />
-              {formik.touched.contactNumber && formik.errors.contactNumber && (
-                <p className="text-red-500 text-sm mt-1">
-                  {formik.errors.contactNumber}
-                </p>
-              )}
-            </div>
+          <div>
+            <label htmlFor="country" className="block text-sm font-medium mb-1">Country*</label>
+            <input
+              type="text"
+              id="country"
+              name="country"
+              placeholder="Country"
+              className={`w-full px-3 py-2 border ${formik.touched.country && formik.errors.country ? 'border-red-500' : 'border-gray-300'}`}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.country}
+            />
+            {formik.touched.country && formik.errors.country && (
+              <div className="text-red-500 text-sm mt-1">{formik.errors.country}</div>
+            )}
           </div>
 
-          {/* Mark as Default Address */}
-          <div className="flex items-center mt-6">
-            <input type="checkbox" id="default-address" className="mr-2" />
-            <label htmlFor="default-address" className="text-sm">
-              Mark as Default Address
-            </label>
+          <div>
+            <label htmlFor="address_line_1" className="block text-sm font-medium mb-1">Address Line 1*</label>
+            <input
+              type="text"
+              id="address_line_1"
+              name="address_line_1"
+              placeholder="Address Line 1"
+              className={`w-full px-3 py-2 border ${formik.touched.address_line_1 && formik.errors.address_line_1 ? 'border-red-500' : 'border-gray-300'}`}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.address_line_1}
+            />
+            {formik.touched.address_line_1 && formik.errors.address_line_1 && (
+              <div className="text-red-500 text-sm mt-1">{formik.errors.address_line_1}</div>
+            )}
           </div>
 
-          {/* Buttons */}
-          <div className="flex flex-col lg:flex-row lg:justify-end lg:items-center mt-6 w-full">
-            <button
-              type="button"
-              className="px-6 py-3 w-full lg:w-auto border border-black text-gray-700 hover:bg-gray-200 focus:outline-none mb-4 lg:mb-0 lg:mr-4"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="px-6 py-3 w-full lg:w-auto border border-black text-gray-700 hover:bg-gray-200 focus:outline-none"
-            >
-              Save
-            </button>
+          <div>
+            <label htmlFor="address_line_2" className="block text-sm font-medium mb-1">Address Line 2 (Optional)</label>
+            <input
+              type="text"
+              id="address_line_2"
+              name="address_line_2"
+              placeholder="Address Line 2"
+              className={`w-full px-3 py-2 border ${formik.touched.address_line_2 && formik.errors.address_line_2 ? 'border-red-500' : 'border-gray-300'}`}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.address_line_2}
+            />
           </div>
-        </form>
-      </div>
+
+          <div>
+            <label htmlFor="city" className="block text-sm font-medium mb-1">City*</label>
+            <input
+              type="text"
+              id="city"
+              name="city"
+              placeholder="City"
+              className={`w-full px-3 py-2 border ${formik.touched.city && formik.errors.city ? 'border-red-500' : 'border-gray-300'}`}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.city}
+            />
+            {formik.touched.city && formik.errors.city && (
+              <div className="text-red-500 text-sm mt-1">{formik.errors.city}</div>
+            )}
+          </div>
+
+          <div>
+            <label htmlFor="state" className="block text-sm font-medium mb-1">State*</label>
+            <input
+              type="text"
+              id="state"
+              name="state"
+              placeholder="State"
+              className={`w-full px-3 py-2 border ${formik.touched.state && formik.errors.state ? 'border-red-500' : 'border-gray-300'}`}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.state}
+            />
+            {formik.touched.state && formik.errors.state && (
+              <div className="text-red-500 text-sm mt-1">{formik.errors.state}</div>
+            )}
+          </div>
+
+          <div>
+            <label htmlFor="zip" className="block text-sm font-medium mb-1">Zip Code*</label>
+            <input
+              type="text"
+              id="zip"
+              name="zip"
+              placeholder="Zip Code"
+              className={`w-full px-3 py-2 border ${formik.touched.zip && formik.errors.zip ? 'border-red-500' : 'border-gray-300'}`}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.zip}
+            />
+            {formik.touched.zip && formik.errors.zip && (
+              <div className="text-red-500 text-sm mt-1">{formik.errors.zip}</div>
+            )}
+          </div>
+
+          <div>
+            <label htmlFor="mobile" className="block text-sm font-medium mb-1">Mobile*</label>
+            <PhoneInput
+              international
+              defaultCountry="IN"
+              value={phoneNumber}
+              required
+              onChange={setPhoneNumber}
+              className={`w-full border ${phoneNumber ? 'border-gray-300' : 'border-red-500'} py-2 px-3 rounded`}
+            />
+            {!phoneNumber && <div className="text-red-500 text-sm mt-1">Mobile is required</div>}
+          </div>
+        </div>
+        <div className="flex justify-end mt-6">
+          <button
+            type="button"
+            className="px-6 py-3 border border-black text-gray-700 hover:bg-gray-200 mr-4"
+            onClick={handleCancel}
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="px-6 py-3 bg-blue-500 text-white hover:bg-blue-600"
+            disabled={loding}
+          >
+            {editData ? "Update" : "Save"}
+          </button>
+        </div>
+      </form>
     </div>
   );
 };

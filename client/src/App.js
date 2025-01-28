@@ -30,6 +30,7 @@ import UserProfile from "./component/user_profile/UserProfile";
 import Login from "./component/auth/Login";
 import CustomToaster from "./utils/constant/CustomToaster";
 import Wishlist from "./page/Wishlist";
+import Checkout from "./page/Checkout";
 
 const App = () => {
   return (
@@ -56,6 +57,7 @@ const App = () => {
           <Route path="about" element={<About />} />
           <Route path="contact" element={<Contact />} />
           <Route path="cart" element={<Cart />} />
+          <Route path="checkout" element={<Checkout />} />
           <Route path="wishlist" element={<Wishlist />} />
           <Route path="details/:id" element={<ProductDetails />} />
           <Route path="profile" element={<Profile />} />
