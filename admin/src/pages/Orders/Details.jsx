@@ -26,13 +26,13 @@ const Details = ({ data }) => {
                     <Typography fontSize={14}>{new Date(data?.createdAt).toDateString()}</Typography>
                 </Stack>
             </Grid>
-            {data?.delivery_days && <Grid item xs={12}>
+            {/* {data?.delivery_days && <Grid item xs={12}>
                 <Typography variant='body2' pb={2} fontWeight={600}>Maximum Delivered Days</Typography>
                 <Stack direction={'row'} justifyContent={'space-between'}>
                     <Typography fontSize={14}>Days</Typography>
                     <Typography fontSize={14}>{data?.delivery_days}</Typography>
                 </Stack>
-            </Grid>}
+            </Grid>} */}
 
             <Grid item xs={12}>
                 <Typography variant='body2' pb={2} fontWeight={600}>Payment details</Typography>
@@ -44,10 +44,10 @@ const Details = ({ data }) => {
                     <Typography fontSize={14}>Order Subtotal</Typography>
                     <Typography fontSize={14}>₹ {data?.amount}/-</Typography>
                 </Stack>
-                <Stack direction={'row'} justifyContent={'space-between'}>
+                {/* <Stack direction={'row'} justifyContent={'space-between'}>
                     <Typography fontSize={14}>Shipping charges</Typography>
                     <Typography fontSize={14}>{data?.delivery_days === 'free' ? 'Free' : (data?.delivery_days === '1'? '18' : "12")}</Typography>
-                </Stack>
+                </Stack> */}
                 {/* <Stack direction={'row'} justifyContent={'space-between'}>
                 <Typography fontSize={14}>Tax</Typography>
                 <Typography fontSize={14}>N/A</Typography>

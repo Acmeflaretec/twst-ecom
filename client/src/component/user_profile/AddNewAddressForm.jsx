@@ -5,8 +5,12 @@ import { useFormik } from "formik";
 import axiosInstance from "../../axios";
 import * as Yup from "yup";
 import { toast } from "react-hot-toast";
+import { setCart } from '../../redux/actions/storeActions';
+import { useDispatch } from "react-redux";
+
 
 const AddNewAddressForm = ({ onClose, editData }) => {
+  const dispatch = useDispatch()
   const [phoneNumber, setPhoneNumber] = useState(editData?.mobile || "");
   const [loding,setLodig] = useState(false)
 
@@ -49,12 +53,14 @@ const AddNewAddressForm = ({ onClose, editData }) => {
             mobile: phoneNumber,
             _id: editData._id,
           });
+          dispatch(setCart(true))
           alert("Address updated successfully");
         } else {
           await axiosInstance.post("/address", {
             ...values,
             mobile: phoneNumber,
           });
+          dispatch(setCart(true))
           alert("Address added successfully");
         }
         onClose();

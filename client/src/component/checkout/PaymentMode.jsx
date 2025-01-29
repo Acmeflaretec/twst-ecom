@@ -1,13 +1,12 @@
-// import { Radio } from 'antd'
+import { Radio } from 'antd'
 import React from 'react'
 
 const PaymentMode = ({ data, dispatch, expand, change }) => {
    return expand ?
-    //   <Radio.Group onChange={dispatch} value={data} className='flex flex-col gap-6'>
-    //      <Radio value="COD"><COD /></Radio>
-    //      <Radio value="online"><Online /></Radio>
-    //   </Radio.Group>
-    <div>payment radio</div>
+      <Radio.Group onChange={dispatch} value={data} className='flex flex-col gap-6'>
+         <Radio value="COD"><COD /></Radio>
+         <Radio value="online"><Online /></Radio>
+      </Radio.Group>
       :
       <div onClick={change} className='md:border md:p-2 cursor-pointer flex justify-between'>
          {data === "COD" ? <COD /> : <Online />}
