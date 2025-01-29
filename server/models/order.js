@@ -9,7 +9,7 @@ const orderSchema = new mongoose.Schema({
     },
     payment_mode: {
         type: String,
-        required: true  
+        required: true
     },
     amount: {
         type: Number,
@@ -21,12 +21,19 @@ const orderSchema = new mongoose.Schema({
     //     required: true
     // },
     address: {
-        emirate: {
+        firstname: {
             type: String,
-            enum: ["Abu Dhabi", "Dubai", "Sharjah", "Ajman", "Umm Al Quwain", "Ras Al Khaimah", "Fujairah"],
             required: true
         },
-        area: {
+        lastname: {
+            type: String,
+            required: true
+        },
+        email: {
+            type: String,
+            required: true
+        },
+        country: {
             type: String,
             required: true
         },
@@ -37,32 +44,25 @@ const orderSchema = new mongoose.Schema({
         address_line_2: {
             type: String,
         },
-        landmark: {
-            type: String,
-        },
-        fullname: {
+
+        city: {
             type: String,
             required: true
         },
-        email: {
+        state: {
             type: String,
             required: true
         },
-        code: {
+        zip: {
             type: String,
             required: true
         },
         mobile: {
-            type: Number,
+            type: String,
             required: true
         },
-        type: {
-            type: String,
-            enum: ["home", "office"],
-            default: "home",
-        },
     },
-    products: {   
+    products: {
         item: [{
             product_id: {
                 type: mongoose.Types.ObjectId,
@@ -87,16 +87,13 @@ const orderSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ["Pending", "Placed", "Shipped", "Out for delivery", "Delivered", "Delayed", "Canceled","Returned"],
+        enum: ["Pending", "Placed", "Shipped", "Out for delivery", "Delivered", "Delayed", "Canceled", "Returned"],
         default: "Placed"
     },
     offer: {
         type: String,
         default: "None"
     },
-    delivery_days: {
-        type: String,
-    }
 },
     {
         timestamps: true

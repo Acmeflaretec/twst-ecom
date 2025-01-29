@@ -118,11 +118,11 @@ const getOrderById = async (req, res) => {
 const createOrder = async (req, res) => {
   const { _id } = req?.decoded
 
-  const { payment_mode, amount, address, products, couponId,delivery_days } = req?.body
-  console.log('payment_mode, amount, address, products,couponId,delivery_days', payment_mode, amount, address, products, couponId,delivery_days);
+  const { payment_mode, amount, address, products, couponId } = req?.body
+  console.log('payment_mode, amount, address, products,couponId', payment_mode, amount, address, products, couponId);
 
   try {
-    const data = await Order.create({ userId: _id, payment_mode, amount, address, products,delivery_days })
+    const data = await Order.create({ userId: _id, payment_mode, amount, address, products })
 
     const user = await User.findById(_id);
     user.cart.item = [];

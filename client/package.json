@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^2.5.0",
+    "antd": "^5.23.3",
     "axios": "^1.7.9",
     "cra-template": "1.2.0",
     "flowbite-react": "^0.10.2",
@@ -20,6 +21,7 @@
     "react-scripts": "5.0.1",
     "react-slick": "^0.30.3",
     "redux": "^5.0.1",
+    "sweetalert2": "^11.10.8",
     "yup": "^1.6.1"
   },
   "scripts": {

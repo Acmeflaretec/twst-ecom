@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import axiosInstance from "../axios";
-import { setUserDetails } from "../redux/actions/userActions";
-import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import Login from "../component/auth/Login";
 import CardDatas from "../component/cardData/CardDatas";
