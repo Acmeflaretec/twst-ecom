@@ -54,21 +54,21 @@ const AddNewAddressForm = ({ onClose, editData }) => {
             _id: editData._id,
           });
           dispatch(setCart(true))
-          alert("Address updated successfully");
+          toast.success("Address updated successfully");
         } else {
           await axiosInstance.post("/address", {
             ...values,
             mobile: phoneNumber,
           });
           dispatch(setCart(true))
-          alert("Address added successfully");
+          toast.success("Address added successfully");
         }
         onClose();
         setLodig(false)
       } catch (error) {
         console.error(error);
         setLodig(false)
-        alert("Error submitting the form");
+        toast.error("Error submitting the form");
       }
     },
   });

@@ -265,6 +265,9 @@ import axiosInstance from '../../axios';
 import { useDispatch } from "react-redux";
 import { setUserDetails } from '../../redux/actions/userActions.js';
 
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
+
 const Login = ({ openModal, setOpenModal }) => {
     const dispatch = useDispatch()
     const [phoneNumber, setPhoneNumber] = useState("");
@@ -352,22 +355,34 @@ const Login = ({ openModal, setOpenModal }) => {
                         <div className="bg-white/30 backdrop-blur-lg p-6 md:p-12 h-full flex flex-col justify-center items-center">
                             <h3 className="mb-6 text-xl font-medium text-gray-900 dark:text-white">LOGIN/SIGNUP</h3>
                             {!showOtpInput ? (
+                                // <>
+                                //     <input
+                                //         type="tel"
+                                //         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 my-5"
+                                //         placeholder="Enter WhatsApp Number"
+                                //         value={phoneNumber}
+                                //         onChange={(e) => setPhoneNumber(e.target.value)}
+                                //     />
+                                //     <Button
+                                //         color="blue"
+                                //         onClick={handleContinue}
+                                //         className="w-full max-w-md mb-4"
+                                //     >
+                                //         Continue
+                                //     </Button>
+                                // </>
                                 <>
-                                    <input
-                                        type="tel"
-                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 my-5"
-                                        placeholder="Enter WhatsApp Number"
-                                        value={phoneNumber}
-                                        onChange={(e) => setPhoneNumber(e.target.value)}
-                                    />
-                                    <Button
-                                        color="blue"
-                                        onClick={handleContinue}
-                                        className="w-full max-w-md mb-4"
-                                    >
-                                        Continue
-                                    </Button>
-                                </>
+                            <PhoneInput
+                                international
+                                defaultCountry="IN"
+                                value={phoneNumber}
+                                onChange={setPhoneNumber}
+                                className="w-full max-w-md bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5"
+                            />
+                            <Button color="blue" onClick={handleContinue} className="w-full max-w-md mt-4">
+                                Continue
+                            </Button>
+                        </>
                             ) : (
                                 <>
                                     <p className="mb-4">Enter OTP sent to {phoneNumber}</p>

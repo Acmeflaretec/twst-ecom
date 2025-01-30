@@ -12,7 +12,6 @@ const navigate = useNavigate()
   const logoutUser = () => {
     dispatch(clearUserDetails());
     localStorage.removeItem('Tokens');
-    // window.location.reload();
     navigate('/');
   };
   return (
