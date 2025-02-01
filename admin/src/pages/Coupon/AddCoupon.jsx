@@ -1,7 +1,8 @@
 import { Alert, Box, Button, Grid, Typography,TextField,Autocomplete } from "@mui/material";
 import React, { useState } from 'react'
 import PageLayout from 'layouts/PageLayout';
-import { useAddCoupon,useGetSimilarProducts,useGetCategory } from "queries/ProductQuery";
+import { useAddCoupon } from "queries/ProductQuery";
+// import { useGetSimilarProducts,useGetCategory } from "queries/ProductQuery";
 import toast from "react-hot-toast";
 import Input from "components/Input";
 import { useNavigate  } from 'react-router-dom';
@@ -9,14 +10,14 @@ import { useNavigate  } from 'react-router-dom';
 const AddCoupon = () => {
   const navigate = useNavigate();
 
-  const [category, setCategory] = useState([])
-  const [product, setProduct] = useState([])
+  // const [category, setCategory] = useState([])
+  // const [product, setProduct] = useState([])
 
   const [data, setData] = useState({})
   const fileInputRef = React.useRef(null);
   
-  const { data:catRespo } = useGetCategory({ pageNo: 1, pageCount: 100 });
-  const { data: respo } = useGetSimilarProducts({ pageNo: 1, pageCount: 100 });
+  // const { data:catRespo } = useGetCategory({ pageNo: 1, pageCount: 100 });
+  // const { data: respo } = useGetSimilarProducts({ pageNo: 1, pageCount: 100 });
 
   
 
@@ -40,8 +41,8 @@ const AddCoupon = () => {
           formData.append(key, data[key]);
         }
       }
-      category.length && category.forEach((category) =>formData.append('categorys', category?._id));
-      product.length && product.forEach((product) => formData.append('products', product._id));
+      // category.length && category.forEach((category) =>formData.append('categorys', category?._id));
+      // product.length && product.forEach((product) => formData.append('products', product._id));
       addCategory(formData)
         .then((res) => {
           toast.success(res?.message ?? "Coupon added");
@@ -155,7 +156,7 @@ const AddCoupon = () => {
               variant="outlined"
             />
           </Grid>
-          <Grid item xs={6}>
+          {/* <Grid item xs={6}>
             <Autocomplete
               id="category-select"
               multiple
@@ -231,7 +232,7 @@ const AddCoupon = () => {
                 />
               )}
             />
-          </Grid>
+          </Grid> */}
 
       
           <Grid item xs={12}>

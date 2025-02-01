@@ -134,7 +134,7 @@ const NavigationBar = () => {
               {userData ? (
                 <Link to="/profile/dashboard">
                   <li>
-                    <FaRegUser />
+                    <FaRegUser className="mt-1"/>
                   </li>
                 </Link>
               ) : (

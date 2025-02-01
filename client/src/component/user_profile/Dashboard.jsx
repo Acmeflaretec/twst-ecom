@@ -1,12 +1,24 @@
-import React from "react";
-import category from "../../asset/category.png";
-import NewArrivalSlice from "../carousel/NewArrivalSlice";
-import {categories} from '../../utils/constant/categories'
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+// import category from "../../asset/category.png";
+// import NewArrivalSlice from "../carousel/NewArrivalSlice";
+// import {categories} from '../../utils/constant/categories'
 import { useDispatch } from "react-redux";
-import { setUserDetails, clearUserDetails } from '../../redux/actions/userActions.js';
+import { clearUserDetails } from '../../redux/actions/userActions.js';
 import { useNavigate } from 'react-router-dom';
+import axiosInstance from '../../axios';
+
 
 const Dashboard = () => {
+  // const [user, setUser] = useState(null);
+  const userDetails = useSelector(state => state.userDetails);
+    const [orders, setOrders] = useState([]);
+    useEffect(() => {
+      axiosInstance.get(`/orders/clientFullorder`)
+        .then((res) => setOrders(res?.data?.data))
+        .catch((error) => console.error(error));
+    }, [userDetails]);
+  
 const dispatch = useDispatch()
 const navigate = useNavigate()
   const logoutUser = () => {
@@ -18,33 +30,27 @@ const navigate = useNavigate()
     <>
     <div className="p-6 md:p-10">
       <div>
-        <h1 className="text-2xl md:text-3xl font-semibold">Hello, Abhirami</h1>
+        <h1 className="text-2xl md:text-3xl font-semibold">Hello, {userDetails?.username ? userDetails?.username : 'user'}</h1>
         <p className="text-gray-600 mt-2">
-          Thanks for being a customer since{" "}
-          <span className="font-medium">December 13, 2024</span>
+          Welcome to your Profile.
         </p>
       </div>
 
       <div className=" mt-6 space-x-8">
         <button className="text-gray-700 font-medium border-b-2 border-black">
-          EDIT PROFILE
+          DASHBORD
         </button>
         <button className="text-gray-500" onClick={logoutUser}>LOG OUT</button>
       </div>
 
       <div className="flex flex-col md:flex-row  items-center gap-6 mt-8">
         <div className="w-full h-20 md:w-60 md:h-24 border flex flex-col justify-center items-center rounded-lg shadow-md">
-          <p className="text-lg font-semibold">0</p>
+          <p className="text-lg font-semibold">{orders?.length}</p>
           <p className="text-gray-600">TOTAL ORDERS</p>
-        </div>
-        <div className="w-full h-20 md:w-60 md:h-24 border flex flex-col justify-center items-center rounded-lg shadow-md">
-          <p className="text-lg font-semibold">$0</p>
-          <p className="text-gray-600">LIFETIME SPENT</p>
         </div>
       </div>
 
-      <div className="mt-10 bg-gray-100 rounded-lg shadow-md p-6 flex flex-col md:flex-row items-start gap-6">
-        {/* Bag Summary */}
+      {/* <div className="mt-10 bg-gray-100 rounded-lg shadow-md p-6 flex flex-col md:flex-row items-start gap-6">
         <div className="bg-[#A97E4E] text-white p-6 rounded-lg flex flex-col items-center justify-center w-full md:w-1/4">
           <p className="text-4xl font-bold">1</p>
           <p className="mt-2 text-lg">ITEMS IN BAG</p>
@@ -52,8 +58,6 @@ const navigate = useNavigate()
             VIEW BAG
           </button>
         </div>
-
-        {/* Product Cards with Horizontal Scroll */}
         <div className="flex gap-6 overflow-x-auto w-full pb-4 scrollbar-hide">
           {Array.from({ length: 20 }).map((_, index) => (
             <div key={index} className="w-36 h-auto flex-shrink-0">
@@ -72,9 +76,9 @@ const navigate = useNavigate()
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
     </div>
-    <NewArrivalSlice text={"New Arrivals" } items={categories} count={3}/>
+    {/* <NewArrivalSlice text={"New Arrivals" } items={categories} count={3}/> */}
     </>
   );
 };

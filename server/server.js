@@ -11,7 +11,7 @@ async function server() {
     connect(`${mongoUrl}/${process.env.DATABASE_NAME}`,
       {       
         useNewUrlParser: true,
-        useUnifiedTopology: true   
+        useUnifiedTopology: true      
       }
     )
     connection.on('connected', () => {

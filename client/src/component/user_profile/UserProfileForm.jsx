@@ -131,11 +131,21 @@ import React, { useState, useEffect } from 'react';
 import axiosInstance from '../../axios';
 import { FaPencilAlt } from 'react-icons/fa';
 import toast from 'react-hot-toast';
+import { useDispatch, useSelector } from "react-redux";
+import Login from "../auth/Login.jsx";
+import { setUserDetails } from '../../redux/actions/userActions.js';
+
+
+
 
 const UserProfileForm = () => {
+    const dispatch = useDispatch()
+    const userData = useSelector(state => state.userDetails);
     const [user, setUser] = useState({ username: '', email: '', phone: '' });
     const [profileImage, setProfileImage] = useState(null);
     const [previewImage, setPreviewImage] = useState('/assets/avatar.png');
+    const [openModal, setOpenModal] = useState(false);
+
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -149,26 +159,33 @@ const UserProfileForm = () => {
         document.getElementById('profileImageInput').click();
     };
 
-    const saveUserDetails = () => {
-        const formData = new FormData();
-        formData.append('email', user.email);
-        formData.append('username', user.username);
-        formData.append('phone', user.phone);
-        if (profileImage) {
-            formData.append('profile', profileImage);
-        }
+    const saveUserDetails =async () => {
+        if (!userData) {
+            setOpenModal(true)
+        } else {
+            const formData = new FormData();
+            formData.append('email', user.email);
+            formData.append('username', user.username);
+            formData.append('phone', user.phone);
+            if (profileImage) {
+                formData.append('profile', profileImage);
+            }
 
-        axiosInstance
-            .post('/user', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            })
-            .then(() => toast.success('User details updated successfully.'))
-            .catch((error) => {
-                console.error('Error updating user details:', error);
-                toast.error('Failed to update user details.');
-            });
+            const response = await axiosInstance
+                .post('/user', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                })
+                .then(() =>{ toast.success('User details updated successfully.')
+                    
+                    // dispatch(setUserDetails(response.data.updatedUser));
+                })
+                .catch((error) => {
+                    console.error('Error updating user details:', error);
+                    toast.error('Failed to update user details.');
+                });
+        }
     };
 
     useEffect(() => {
@@ -191,61 +208,65 @@ const UserProfileForm = () => {
     }, []);
 
     return (
-        <div className="flex justify-center items-center h-screen bg-gray-100">
-            <div className="bg-white shadow-lg rounded-2xl p-6 w-full max-w-md">
-                <div className="flex flex-col items-center">
-                    <div className="relative overflow-hidden rounded-full cursor-pointer w-24 h-24 bg-gray-200 mb-4">
-                        <img src={previewImage} alt="Profile Picture" className="w-full h-full object-cover" />
-                        <div
-                            className="absolute inset-0 bg-black bg-opacity-50 rounded-full flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300"
-                            onClick={handleIconClick}
-                        >
-                            <FaPencilAlt className="text-white text-2xl" />
+        <>
+            <div className="flex justify-center items-center h-screen bg-gray-100">
+                <div className="bg-white shadow-lg rounded-2xl p-6 w-full max-w-md">
+                    <div className="flex flex-col items-center">
+                        <div className="relative overflow-hidden rounded-full cursor-pointer w-24 h-24 bg-gray-200 mb-4">
+                            <img src={previewImage} alt="Profile Picture" className="w-full h-full object-cover" />
+                            <div
+                                className="absolute inset-0 bg-black bg-opacity-50 rounded-full flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300"
+                                onClick={handleIconClick}
+                            >
+                                <FaPencilAlt className="text-white text-2xl" />
+                            </div>
+                            <input
+                                id="profileImageInput"
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageChange}
+                                className="hidden"
+                            />
                         </div>
+                        <h2 className="text-xl font-semibold text-gray-700 mb-4">Edit Profile</h2>
+                    </div>
+
+                    <div className="space-y-4">
                         <input
-                            id="profileImageInput"
-                            type="file"
-                            accept="image/*"
-                            onChange={handleImageChange}
-                            className="hidden"
+                            type="text"
+                            className="w-full p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Username"
+                            value={user?.username}
+                            onChange={(e) => setUser({ ...user, username: e.target.value })}
+                        />
+                        <input
+                            type="email"
+                            className="w-full p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Email"
+                            value={user?.email}
+                            onChange={(e) => setUser({ ...user, email: e.target.value })}
+                        />
+                        <input
+                            type="tel"
+                            className="w-full p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Phone"
+                            value={user?.phone}
+                            onChange={(e) => setUser({ ...user, phone: e.target.value })}
+                            disabled={user?.phone}
                         />
                     </div>
-                    <h2 className="text-xl font-semibold text-gray-700 mb-4">Edit Profile</h2>
-                </div>
 
-                <div className="space-y-4">
-                    <input
-                        type="text"
-                        className="w-full p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="Username"
-                        value={user?.username}
-                        onChange={(e) => setUser({ ...user, username: e.target.value })}
-                    />
-                    <input
-                        type="email"
-                        className="w-full p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="Email"
-                        value={user?.email}
-                        onChange={(e) => setUser({ ...user, email: e.target.value })}
-                    />
-                    <input
-                        type="tel"
-                        className="w-full p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="Phone"
-                        value={user?.phone}
-                        onChange={(e) => setUser({ ...user, phone: e.target.value })}
-                        disabled={user?.phone}
-                    />
+                    <button
+                        onClick={saveUserDetails}
+                        className="mt-6 w-full bg-blue-500 text-white font-semibold py-3 rounded-lg shadow-md hover:bg-blue-600 transition duration-300"
+                    >
+                        Save Changes
+                    </button>
                 </div>
-
-                <button
-                    onClick={saveUserDetails}
-                    className="mt-6 w-full bg-blue-500 text-white font-semibold py-3 rounded-lg shadow-md hover:bg-blue-600 transition duration-300"
-                >
-                    Save Changes
-                </button>
             </div>
-        </div>
+            {openModal && <Login openModal={openModal} setOpenModal={setOpenModal} />}
+        </>
+
     );
 };
 

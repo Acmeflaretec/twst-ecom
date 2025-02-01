@@ -4,9 +4,9 @@ const { OAuth2Client } = require('google-auth-library');
 const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const dotenv = require('dotenv');
 dotenv.config();
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const twilio = require('twilio');
 
 

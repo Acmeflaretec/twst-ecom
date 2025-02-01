@@ -78,14 +78,14 @@ const routes = [
     icon: <Box component="i" color="info" fontSize="14px" className="ni ni-single-copy-04" />,
     component: <Sections />,
   },
-  {
-    type: "route",
-    name: "Tags",
-    key: "tags",
-    route: "/tags",
-    icon: <Box component="i" color="primary" fontSize="14px" className="ni ni-book-bookmark" />,
-    component: <Tags />,
-  },
+  // {
+  //   type: "route",
+  //   name: "Tags",
+  //   key: "tags",
+  //   route: "/tags",
+  //   icon: <Box component="i" color="primary" fontSize="14px" className="ni ni-book-bookmark" />,
+  //   component: <Tags />,
+  // },
   // {
   //   type: "route",
   //   name: "Blogs",
