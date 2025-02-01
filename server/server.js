@@ -11,11 +11,11 @@ async function server() {
     connect(`${mongoUrl}/${process.env.DATABASE_NAME}`,
       {       
         useNewUrlParser: true,
-        useUnifiedTopology: true   
+        useUnifiedTopology: true      
       }
     )
     connection.on('connected', () => {
-      console.log('Connected to MongoDB');
+      console.log('Connected to MongoDB');           
     });
   } catch (error) {
     console.log(error.message);

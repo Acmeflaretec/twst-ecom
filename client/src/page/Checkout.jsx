@@ -167,10 +167,6 @@ function Checkout() {
         setDeliveryAddress(details);
     }
 
-    // const handleDeliveryAddress = (address) => {
-    //     setDeliveryAddress(address);
-    //     setStep(1); 
-    // };
 
     const handleDeliveryInstruction = () => setDeliveryInstruction(!DeliveryInstruction)
 
@@ -213,7 +209,6 @@ function Checkout() {
 
         dispatch(setUserDetails(response.data.user));
         setLoadingState(false)
-        // router.push(`/order-success?orderId=${response.data.orderId}`)
         Swal.fire({
             title: "Success",
             text: "Your order has been placed!",
@@ -223,6 +218,56 @@ function Checkout() {
           });
           navigate("/");
     };
+
+    const handleOnlinePayment = async () => {
+        try {
+            const { data } = await axiosInstance.post("/payment/create-order", {
+                amount: lastTotal, 
+                currency: "INR",
+            });
+            console.log('this is data',data);
+            
+    
+            const options = {
+                key: process.env.REACT_APP_RAZORPAY_KEY_ID,   
+                amount: data.amount,
+                currency: data.currency,
+                order_id: data.orderId,
+                name: "TWST",
+                description: "Order Payment",
+                handler: async function (response) {
+                    const paymentData = {
+                        razorpay_order_id: response.razorpay_order_id,
+                        razorpay_payment_id: response.razorpay_payment_id,
+                        razorpay_signature: response.razorpay_signature,
+                    };
+    
+                    const verifyResponse = await axiosInstance.post("/payment/verify-payment", paymentData);
+    
+                    if (verifyResponse.data.success) {
+                        toast.success("Payment successful!");
+                        handlePaymentSuccess();
+                    } else {
+                        toast.error("Payment verification failed!");
+                    }
+                },
+                prefill: {
+                    name: userDetails?.name,
+                    email: userDetails?.email,
+                    contact: userDetails?.phone,
+                },
+                theme: {
+                    color: "#F37254",
+                },
+            };
+    
+            const razorpay = new window.Razorpay(options);
+            razorpay.open();
+        } catch (error) {
+            console.error("Error initiating payment:", error);
+            toast.error("Payment failed. Please try again.");
+        }
+    };    
 
     const CheckoutButton = () => {
         const data = [
@@ -267,6 +312,7 @@ function Checkout() {
             }
             if (step === 3) {
                 // orderStoredInlocalStorage();
+                handleOnlinePayment();
                 return;
             }
             setStep(0);
@@ -299,13 +345,13 @@ function Checkout() {
                                 <div key={DeliveryAddress._id} onClick={() => dispatch(DeliveryAddress)} className="flex flex-row gap-2 text-xs md:text-sm border rounded-lg p-4">
                                     <div className="relative flex justify-between items-start mb-2 w-full">
                                         <div>
-                                            <p className="font-bold">{DeliveryAddress?.fullname}</p>
+                                            <p className="font-bold">{DeliveryAddress.firstname} {DeliveryAddress.lastname}</p>
                                             <p className="text-gray-600">{DeliveryAddress?.address_line_1}, {DeliveryAddress?.address_line_2}, {DeliveryAddress?.area}, {DeliveryAddress?.emirate}</p>
                                             <p className="text-gray-600">Email: {DeliveryAddress?.email}</p>
                                             <p className="text-gray-600">Phone: {DeliveryAddress?.code} {DeliveryAddress?.mobile}</p>
                                         </div>
                                         <div className="flex items-center gap-2">
-                                            <button onClick={() => setStep(0)} className="font-medium text-blue-400">Change</button>
+                                            <button onClick={() => setStep(1)} className="font-medium text-blue-400">Change</button>
                                         </div>
                                     </div>
                                 </div>

@@ -1,11 +1,12 @@
 const Order = require('../models/order')
 const User = require('../models/user');
 const Product = require('../models/product');
-const Address = require('../models/address');   
-const nodemailer = require('nodemailer');      
+const Address = require('../models/address');
+const nodemailer = require('nodemailer');
 const moment = require('moment-timezone');
 const dotenv = require('dotenv');
 dotenv.config();
+const twilio = require('twilio');
 
 const transporter = nodemailer.createTransport({
   service: 'Gmail',
@@ -13,7 +14,7 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL_AUTH_USER,
     pass: process.env.EMAIL_AUTH_PASS,
   },
-});  
+});
 
 const getOrders = async (req, res) => {
   try {
@@ -26,15 +27,29 @@ const getOrders = async (req, res) => {
 };
 const getClientOrders = async (req, res) => {
   console.log('getClientOrders');
-  
+
   try {
     const { _id } = req?.decoded
     const { status } = req.query;
-    console.log('status',status);
-    const data = await Order.find({ userId: _id ,status }).populate('products.item.product_id')
-    .populate('address')
-    .sort({ createdAt: -1 });   
-    console.log('order data',data);
+    console.log('status', status);
+    const data = await Order.find({ userId: _id, status }).populate('products.item.product_id')
+      .populate('address')
+      .sort({ createdAt: -1 });
+    console.log('order data', data);
+    res.status(200).json({ data })
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: err?.message ?? 'Something went wrong' })
+  }
+};
+const getClientFullorder = async (req, res) => {
+
+  try {
+    const { _id } = req?.decoded
+    const data = await Order.find({ userId: _id }).populate('products.item.product_id')
+      .populate('address')
+      .sort({ createdAt: -1 });
+    console.log('order data', data);
     res.status(200).json({ data })
   } catch (err) {
     console.log(err);
@@ -119,7 +134,7 @@ const createOrder = async (req, res) => {
   const { _id } = req?.decoded
 
   const { payment_mode, amount, address, products, couponId } = req?.body
-  console.log('payment_mode, amount, address, products,couponId', payment_mode, amount, address, products, couponId);
+  // console.log('payment_mode, amount, address, products,couponId', payment_mode, amount, address, products, couponId);
 
   try {
     const data = await Order.create({ userId: _id, payment_mode, amount, address, products })
@@ -127,7 +142,7 @@ const createOrder = async (req, res) => {
     const user = await User.findById(_id);
     user.cart.item = [];
     user.cart.totalPrice = 0;
-    user.orderCount +=1
+    user.orderCount += 1
 
     if (couponId) {
       if (user.coupons.includes(couponId)) {
@@ -164,100 +179,115 @@ const createOrder = async (req, res) => {
     }
 
 
-    const productDetails = await Order.findById(data._id) 
-            .populate({
-                path: 'products.item.product_id', 
-                model: 'Product'                    
-            })
+    const productDetails = await Order.findById(data._id)
+      .populate({
+        path: 'products.item.product_id',
+        model: 'Product'
+      })
 
     const orderNumber = productDetails._id;
-    const orderTime = moment().tz('Asia/Kolkata').format('YYYY-MM-DD HH:mm:ss');
-    const adminEmail = process.env.EMAIL_ADMIN;
+    // const orderTime = moment().tz('Asia/Kolkata').format('YYYY-MM-DD HH:mm:ss');
+    // const adminEmail = process.env.EMAIL_ADMIN;
 
-    const emailSubject = `Your Nila Trends Order ID is:${orderNumber}`;
+    // const emailSubject = `Your Nila Trends Order ID is:${orderNumber}`;
 
-    const productItems =  productDetails.products.item.map(item => `
-      <tr>
-        <td>${item.product_id.name}</td>
-        <td>${item.qty}</td>
-        <td>${item.size}</td>
-        <td>₹${item.price}</td>
-      </tr>
-    `).join('');
+    // const productItems =  productDetails.products.item.map(item => `
+    //   <tr>
+    //     <td>${item.product_id.name}</td>
+    //     <td>${item.qty}</td>
+    //     <td>${item.size}</td>
+    //     <td>₹${item.price}</td>
+    //   </tr>
+    // `).join('');
 
-    const customerEmailHtml = `
-      <div style="font-family: Arial, sans-serif; line-height: 1.6;">
-        <h1 style="color: #4CAF50;">Order Received</h1>
-        <p>Dear ${productDetails?.address?.fullname},</p>
-        <p>Thank you for your order. </p>
-        <p>Here are your order details:</p>
-        <table style="width: 100%; border-collapse: collapse;">
-          <thead>
-            <tr style="background-color: #f2f2f2;">
-              <th style="padding: 8px; border: 1px solid #ddd;">Product Name</th>
-              <th style="padding: 8px; border: 1px solid #ddd;">Quantity</th>
-              <th style="padding: 8px; border: 1px solid #ddd;">Size</th>
-              <th style="padding: 8px; border: 1px solid #ddd;">Price</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${productItems}
-          </tbody>
-        </table>
-        <p><strong>Total Amount:</strong> ₹${productDetails?.amount}</p>
-        <p><strong>Order Date and Time (IST):</strong> ${orderTime}</p>   
-        <p>We will notify you once your order is shipped.</p>
-        <p>Thank you for shopping with us!</p>
-        <p>Best Regards,<br>Melon Magnets</p>
-      </div>
-    `;
+    // const customerEmailHtml = `
+    //   <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+    //     <h1 style="color: #4CAF50;">Order Received</h1>
+    //     <p>Dear ${productDetails?.address?.fullname},</p>
+    //     <p>Thank you for your order. </p>
+    //     <p>Here are your order details:</p>
+    //     <table style="width: 100%; border-collapse: collapse;">
+    //       <thead>
+    //         <tr style="background-color: #f2f2f2;">
+    //           <th style="padding: 8px; border: 1px solid #ddd;">Product Name</th>
+    //           <th style="padding: 8px; border: 1px solid #ddd;">Quantity</th>
+    //           <th style="padding: 8px; border: 1px solid #ddd;">Size</th>
+    //           <th style="padding: 8px; border: 1px solid #ddd;">Price</th>
+    //         </tr>
+    //       </thead>
+    //       <tbody>
+    //         ${productItems}
+    //       </tbody>
+    //     </table>
+    //     <p><strong>Total Amount:</strong> ₹${productDetails?.amount}</p>
+    //     <p><strong>Order Date and Time (IST):</strong> ${orderTime}</p>   
+    //     <p>We will notify you once your order is shipped.</p>
+    //     <p>Thank you for shopping with us!</p>
+    //     <p>Best Regards,<br>Melon Magnets</p>
+    //   </div>
+    // `;
 
-    const internalEmailHtml = `
-      <div style="font-family: Arial, sans-serif; line-height: 1.6;">
-        <h1 style="color: #4CAF50;">Order Received</h1>
-        <p>New order has been placed by <b>${productDetails?.address?.fullname}</b> at ${orderTime}.</p>
-        <p><strong>Email:</strong> ${productDetails?.address?.email}</p>
-        <p><strong>Phone:</strong> ${productDetails?.address?.mobile}</p>
-        <table style="width: 100%; border-collapse: collapse;">
-          <thead>
-            <tr style="background-color: #f2f2f2;">
-              <th style="padding: 8px; border: 1px solid #ddd;">Product Name</th>
-              <th style="padding: 8px; border: 1px solid #ddd;">Quantity</th>
-              <th style="padding: 8px; border: 1px solid #ddd;">Size</th>
-              <th style="padding: 8px; border: 1px solid #ddd;">Price</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${productItems}
-          </tbody>
-        </table>
-        <p><strong>Total Amount:</strong> ₹${productDetails?.amount}</p>
-        <p>For more details, <a href="https://admin.nilaatrends.com//#/orders/editOrder/${productDetails?._id}" target="_blank">Click here</a>.</p>
-      </div>
-    `;
+    // const internalEmailHtml = `
+    //   <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+    //     <h1 style="color: #4CAF50;">Order Received</h1>
+    //     <p>New order has been placed by <b>${productDetails?.address?.fullname}</b> at ${orderTime}.</p>
+    //     <p><strong>Email:</strong> ${productDetails?.address?.email}</p>
+    //     <p><strong>Phone:</strong> ${productDetails?.address?.mobile}</p>
+    //     <table style="width: 100%; border-collapse: collapse;">
+    //       <thead>
+    //         <tr style="background-color: #f2f2f2;">
+    //           <th style="padding: 8px; border: 1px solid #ddd;">Product Name</th>
+    //           <th style="padding: 8px; border: 1px solid #ddd;">Quantity</th>
+    //           <th style="padding: 8px; border: 1px solid #ddd;">Size</th>
+    //           <th style="padding: 8px; border: 1px solid #ddd;">Price</th>
+    //         </tr>
+    //       </thead>
+    //       <tbody>
+    //         ${productItems}
+    //       </tbody>
+    //     </table>
+    //     <p><strong>Total Amount:</strong> ₹${productDetails?.amount}</p>
+    //     <p>For more details, <a href="https://admin.nilaatrends.com//#/orders/editOrder/${productDetails?._id}" target="_blank">Click here</a>.</p>
+    //   </div>
+    // `;
 
-console.log('productDetails?.address?.email',productDetails?.address?.email);
-
-    await transporter.sendMail({
-      from: process.env.EMAIL_AUTH_USER,
-      to: productDetails?.address?.email,
-      subject: emailSubject,
-      html: customerEmailHtml,
-    });
+    // await transporter.sendMail({
+    //   from: process.env.EMAIL_AUTH_USER,
+    //   to: productDetails?.address?.email,
+    //   subject: emailSubject,
+    //   html: customerEmailHtml,
+    // });
 
 
-    await transporter.sendMail({
-      from: process.env.EMAIL_AUTH_USER,
-      to: adminEmail,
-      subject: emailSubject,
-      html: internalEmailHtml,
-    });
+    // await transporter.sendMail({
+    //   from: process.env.EMAIL_AUTH_USER,
+    //   to: adminEmail,
+    //   subject: emailSubject,
+    //   html: internalEmailHtml,
+    // });
+    const accountSid = process.env.TWILIO_ACCOUNT_SID;
+    const authToken = process.env.TWILIO_AUTH_TOKEN;
+    const client = twilio(accountSid, authToken);
+
+    await client.messages.create({
+      from: process.env.TWILIO_WHATSAPP_FROM,
+      to: `whatsapp:${user?.phone}`,
+      // contentSid: process.env.TWILIO_CONTANT_SID,
+      contentSid: 'HXddbafd7b1de21d526ca297a28515717e',
+      contentVariables: JSON.stringify({
+        "1": address?.firstname+''+address?.lastname,
+        "2": orderNumber
+      })
+
+
+    })
+      .then((message) => console.log("OTP sent:", message.sid))
+      .catch((error) => console.error("Error sending OTP:", error));
 
 
 
 
-
-    res.status(201).json({ user,orderId:orderNumber, message: 'Order placed successfully' });
+    res.status(201).json({ user, orderId: orderNumber, message: 'Order placed successfully' });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ message: err?.message ?? 'Something went wrong' })
@@ -316,5 +346,6 @@ module.exports = {
   getReviewOrders,
   getAdminOrders,
   updateOrderStatus,
-  getClientOrders
+  getClientOrders,
+  getClientFullorder
 }

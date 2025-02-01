@@ -146,17 +146,18 @@ const CardDatas = ({ key, product }) => {
   return (
     <>
       <div
-        className="w-full md:w-56 lg:w-64 bg-white rounded-lg overflow-hidden relative group cursor-pointer"
+        // className="w-full md:w-56 lg:w-64 bg-white rounded-lg overflow-hidden relative group cursor-pointer"
+        className="w-full md:w-56  bg-white rounded-lg overflow-hidden relative group cursor-pointer"
         onMouseEnter={() => setChangePhoto(true)}
         onMouseLeave={() => setChangePhoto(false)}
         key={key}
       >
-        <div className="relative h-96 w-full">
+        <div className="relative  w-full">
           <Link to={`/details/${product._id}`}>
             <img
               src={changePhoto ? `${process.env.REACT_APP_API_BASE_URL}/uploads/${product?.image[0]}` : (product?.image[1] ? `${process.env.REACT_APP_API_BASE_URL}/uploads/${product?.image[1]}` : `${process.env.REACT_APP_API_BASE_URL}/uploads/${product?.image[0]}`)}
               alt="Product"
-              className="w-full h-full object-cover lg:object-fill transition-transform duration-300 ease-in-out group-hover:scale-105"
+              className="w-full h-48 sm:h-64 object-cover lg:object-fill transition-transform duration-300 ease-in-out group-hover:scale-105"
             />
             <div className="absolute top-2 left-2 bg-red-950 text-white px-2 py-1 rounded text-xs font-semibold">
               {`${Math.ceil(product?.discount || 0)}% OFF`}
@@ -169,7 +170,7 @@ const CardDatas = ({ key, product }) => {
             <CiHeart className="hover:text-blue-500" size={18} />
           </button>
           <Link to={`/details/${product._id}`}>
-            <button className="flex items-center gap-3 md:gap-1 lg:gap-3 absolute left-1/2 bottom-4 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out bg-white text-black py-3 px-3 md:py-2 md:px-2 lg:py-3 lg:px-3 text-sm font-thin">
+            <button className="flex items-center gap-3 md:gap-1 lg:gap-3 absolute left-1/2 bottom-4 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out bg-white text-black py-3 px-3 md:py-2 md:px-2 lg:py-3 lg:px-3 text-sm font-thin  text-[10px] sm:text-xs px-1.5 py-0.5 whitespace-nowrap">
               <IoBagAddOutline /> ADD TO BAG
             </button>
           </Link>
@@ -177,16 +178,16 @@ const CardDatas = ({ key, product }) => {
         <Link to={`/details/${product._id}`}>
           <div className="p-4 flex flex-col gap-2">
             <div className="flex items-center justify-between">
-              <h2 className="text-sm font-light text-gray-800">
+              <h2 className="text-[10px] sm:text-xs font-light text-gray-800">
                 {product?.name}
               </h2>
-              <p className="text-lg font-light text-gray-800">
+              <p className="text-[10px] sm:text-xs font-light text-gray-800">
                 ₹{product?.sale_rate}
               </p>
             </div>
             <div className="flex items-center justify-between">
               <p className="text-xs text-red-500">{product?.category?.name}</p>
-              <p className="font-light text-gray-300 text-sm line-through">
+              <p className="font-light text-gray-300 text-[10px] sm:text-xs line-through">
                 ₹{product?.price}
               </p>
             </div>

@@ -107,7 +107,7 @@ const ProductDetails = () => {
     }
     if (selectedSize || product?.stock) {
       selectedSize ? dispatch(setCheckoutProduct({ product, selectedSize: selectedSize || null })) : dispatch(setCheckoutProduct({ product }))
-      //  navigate('/checkout')
+      navigate('/checkout')
     } else {
       toast.error('please select size')
     }

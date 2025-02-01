@@ -27,16 +27,16 @@ import EditProduct from "pages/Products/EditProduct";
 import EditOrder from "pages/Orders/EditOrder";
 import Login from "pages/Auth";
 import AddBanner from "pages/Banner/AddBanner";
-import AddBlog from "pages/Blogs/AddBlog";
+// import AddBlog from "pages/Blogs/AddBlog";
+// import EditBlog from "pages/Blogs/EditBlog";
 import EditBanner from "pages/Banner/EditBanner";
-import EditBlog from "pages/Blogs/EditBlog";
 import AddCoupon from "pages/Coupon/AddCoupon";
 import EditCoupon from "pages/Coupon/EditCoupon";
 import VariantProduct from "pages/Products/VariantProduct";
 import AddSection from "pages/Sections/AddSection";
 import EditSection from "pages/Sections/EditSection";
-import AddTag from "pages/Tags/AddTag";
-import EditTag from "pages/Tags/EditTag";
+// import AddTag from "pages/Tags/AddTag";
+// import EditTag from "pages/Tags/EditTag";
 
 export default function App() {
   const [controller, dispatch] = useController();
@@ -121,14 +121,14 @@ export default function App() {
                 <Route path="/orders/editOrder/:id" element={<EditOrder />} />
                 <Route path="/coupon/addCoupon" element={<AddCoupon />} />
                 <Route path="/coupon/editCoupon/:id" element={<EditCoupon />} />
-                <Route path="/tags/addTags" element={<AddTag />} />
-                <Route path="/tags/editTags/:id" element={<EditTag />} />
+                {/* <Route path="/tags/addTags" element={<AddTag />} />
+                <Route path="/tags/editTags/:id" element={<EditTag />} /> */}
                 <Route path="/sections/addSection" element={<AddSection />} />
                 <Route path="/sections/editSection/:id" element={<EditSection />} />
                 <Route path="/coupon/addCoupon" element={<AddCoupon />} />
                 <Route path="/coupon/editCoupon/:id" element={<EditCoupon />} />
-                <Route path="/blogs/addBlog" element={<AddBlog />} />
-                <Route path="/blogs/editBlog/:id" element={<EditBlog />} />
+                {/* <Route path="/blogs/addBlog" element={<AddBlog />} />
+                <Route path="/blogs/editBlog/:id" element={<EditBlog />} /> */}
                 <Route path="*" element={<Navigate to="/orders" />} />
               </Routes>
               {/* <Footer /> */}
@@ -161,14 +161,14 @@ export default function App() {
               <Route path="/products/editProduct/:id" element={<EditProduct />} />
               <Route path="/orders/editOrder/:id" element={<EditOrder />} />
               <Route path="/banners/editBanner/:id" element={<EditBanner />} />
-              <Route path="/tags/addTags" element={<AddTag />} />
-              <Route path="/tags/editTags/:id" element={<EditTag />} />
+              {/* <Route path="/tags/addTags" element={<AddTag />} />
+              <Route path="/tags/editTags/:id" element={<EditTag />} /> */}
               <Route path="/sections/addSection" element={<AddSection />} />
               <Route path="/sections/editSection/:id" element={<EditSection />} />
               <Route path="/coupon/addCoupon" element={<AddCoupon />} />
               <Route path="/coupon/editCoupon/:id" element={<EditCoupon />} />
-              <Route path="/blogs/addBlog" element={<AddBlog />} />
-              <Route path="/blogs/editBlog/:id" element={<EditBlog />} />
+              {/* <Route path="/blogs/addBlog" element={<AddBlog />} />
+              <Route path="/blogs/editBlog/:id" element={<EditBlog />} /> */}
               <Route path="*" element={<Navigate to="/orders" />} />
             </Routes>
             {/* <Footer /> */}

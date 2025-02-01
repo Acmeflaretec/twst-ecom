@@ -4,10 +4,11 @@ const { OAuth2Client } = require('google-auth-library');
 const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const dotenv = require('dotenv');
 dotenv.config();
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const twilio = require('twilio');
+
 
 module.exports.getCurrentUser = async (req, res) => {
   try {
@@ -46,24 +47,30 @@ let otpStore = {};
 //     res.status(500).json({ message: 'Failed to send OTP', error: error.message });
 //   }
 // };
-
 module.exports.sendWhatsAppOtp = async (req, res) => {
-  const { number } = req.body; // `number` should include the country code, e.g., +91XXXXXXXXXX
-  const otp = Math.floor(100000 + Math.random() * 900000).toString(); // Generate 6-digit OTP
-  console.log('number,otp',number,otp);
-  
+  const { number } = req.body;
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+  console.log('number,otp', number, otp);
+
   otpStore[number] = otp;
 
   try {
-    // const accountSid = process.env.TWILIO_ACCOUNT_SID;
-    // const authToken = process.env.TWILIO_AUTH_TOKEN;
-    // const client = twilio(accountSid, authToken);
+    const accountSid = process.env.TWILIO_ACCOUNT_SID;
+    const authToken = process.env.TWILIO_AUTH_TOKEN;
+    const client = twilio(accountSid, authToken);
 
     // await client.messages.create({
     //   from: process.env.TWILIO_WHATSAPP_FROM,
     //   to: `whatsapp:${number}`,
-    //   body: `✨ Twst Verification ✨\n\nYour OTP is: ${otp}\n\nPlease enter this code to verify your identity. Valid for 10 minutes.`,
-    // });
+    //   contentSid: process.env.TWILIO_CONTANT_SID,
+    //   contentVariables: JSON.stringify({
+    //     "1": otp.toString()
+    //   })
+
+    // })
+    //   .then((message) => console.log("OTP sent:", message.sid))   
+    //   .catch((error) => console.error("Error sending OTP:", error));
+
 
     res.status(200).json({ message: 'OTP sent via WhatsApp successfully' });
   } catch (error) {
