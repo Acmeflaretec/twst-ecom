@@ -80,7 +80,7 @@ import { IoBagAddOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import Login from "../auth/Login";
 import axiosInstance from '../../axios';
-import { toast } from 'react-hot-toast';
+// import { toast } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUserDetails } from '../../redux/actions/userActions';
 

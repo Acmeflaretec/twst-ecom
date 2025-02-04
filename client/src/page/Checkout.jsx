@@ -85,7 +85,7 @@ function Checkout() {
             setCartData(response?.data?.data)
             const items = response?.data?.data?.item;
             const filteredItems = items.filter((obj) => {
-                return obj.productId.isAvailable != false
+                return obj.productId.isAvailable !== false
             })
             const totalSalePrice = calculateTotalSalePrice(filteredItems);
             setSalePriceTotal(totalSalePrice)
@@ -116,7 +116,7 @@ function Checkout() {
             setCartData(newCartItem);
             const items = newCartItem?.item;
             const filteredItems = items.filter((obj) => {
-                return obj.productId.isAvailable != false
+                return obj.productId.isAvailable !== false
             })
             const totalSalePrice = calculateTotalSalePrice(filteredItems);
             setSalePriceTotal(totalSalePrice)

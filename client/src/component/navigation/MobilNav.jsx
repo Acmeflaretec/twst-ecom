@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { openMobileNav } from "../../redux/actions/generalActions.js";
 import { FaShoppingBag } from "react-icons/fa";
 import { RiContactsLine } from "react-icons/ri";
-import { CiLocationOn } from "react-icons/ci";
+// import { CiLocationOn } from "react-icons/ci";
 import { CiLogin } from "react-icons/ci";
 import { IoCartOutline } from "react-icons/io5";
 import { HiShoppingBag, } from "react-icons/hi";
