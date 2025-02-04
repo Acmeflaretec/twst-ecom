@@ -59,17 +59,17 @@ module.exports.sendWhatsAppOtp = async (req, res) => {
     const authToken = process.env.TWILIO_AUTH_TOKEN;
     const client = twilio(accountSid, authToken);
 
-    // await client.messages.create({
-    //   from: process.env.TWILIO_WHATSAPP_FROM,
-    //   to: `whatsapp:${number}`,
-    //   contentSid: process.env.TWILIO_CONTANT_SID,
-    //   contentVariables: JSON.stringify({
-    //     "1": otp.toString()
-    //   })
+    await client.messages.create({
+      from: process.env.TWILIO_WHATSAPP_FROM,
+      to: `whatsapp:${number}`,
+      contentSid: process.env.TWILIO_CONTANT_SID,
+      contentVariables: JSON.stringify({
+        "1": otp.toString()
+      })
 
-    // })
-    //   .then((message) => console.log("OTP sent:", message.sid))   
-    //   .catch((error) => console.error("Error sending OTP:", error));
+    })
+      .then((message) => console.log("OTP sent:", message.sid))   
+      .catch((error) => console.error("Error sending OTP:", error));
 
 
     res.status(200).json({ message: 'OTP sent via WhatsApp successfully' });
