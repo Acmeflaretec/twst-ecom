@@ -43,7 +43,7 @@
 
 
 import React from "react";
-import { FaTrash } from "react-icons/fa";
+// import { FaTrash } from "react-icons/fa";
 
 const CartList = ({ cartData, onQuantityChange, onRemoveItem }) => {
   console.log('cartData', cartData);

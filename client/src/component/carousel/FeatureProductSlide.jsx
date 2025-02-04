@@ -1,6 +1,6 @@
 import React from "react";
-import { CiHeart } from "react-icons/ci";
-import { IoBagAddOutline } from "react-icons/io5";
+// import { CiHeart } from "react-icons/ci";
+// import { IoBagAddOutline } from "react-icons/io5";
 import Carousel from "react-multi-carousel";
 import CardDatas from "../cardData/CardDatas";
 
